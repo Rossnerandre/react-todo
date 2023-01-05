@@ -1,5 +1,9 @@
 {
   "translation": {
-    "header": "React Lista de tarefas"    
+    "header": "React Lista de tarefas",
+    "newTodo": "Add Nova Tafefa",
+    "todoInputError": "Por favor, insira sua tarefa!",
+    "todo": "Tarefa"
+
   }
 }
