@@ -1,0 +1,22 @@
+{
+  "todos": [
+    {
+      "id": "caf4ef64-88a5-4405-adfb-9abb8fa4c9cf",
+      "key": "caf4ef64-88a5-4405-adfb-9abb8fa4c9cf",
+      "todo": "Work",
+      "completed": false
+    },
+    {
+      "id": "626e8abb-4eef-4189-99d2-c82aea3389bf",
+      "key": "626e8abb-4eef-4189-99d2-c82aea3389bf",
+      "todo": "Go to PetShop",
+      "completed": false
+    },
+    {
+      "id": "a4b9e881-a20c-4109-bf92-b5f6684c6ca9",
+      "key": "a4b9e881-a20c-4109-bf92-b5f6684c6ca9",
+      "todo": "Go to gym",
+      "completed": false
+    }
+  ]
+}
