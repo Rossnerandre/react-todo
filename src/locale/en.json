@@ -3,6 +3,7 @@
     "header": "React Todo List",
     "newTodo": "Add New To Do",
     "todoInputError": "Please input your todo!",
-    "todo": "Todo"
+    "todo": "Todo",
+    "editTodo": "Edit"
   }
 }
