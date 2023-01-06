@@ -1,31 +1,16 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import ModalForm, { ModalHandles } from "./modal-form/ModalForm";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../types/todo";
-
-const data: TodoType[] = [
-  {
-    key: "1",
-    todo: "Estudar",
-    completed: true,
-  },
-  {
-    key: "2",
-    todo: "Trabalhar",
-    completed: false,
-  },
-  {
-    key: "3",
-    todo: "Dormir",
-    completed: false,
-  },
-];
+import { useFetchSWR } from "../hooks/useFetchSWR";
 
 function TableTodo() {
   const [editData, setEditData] = useState<TodoType | null>();
   const { t } = useTranslation();
+
+  const { data, isLoading, mutate } = useFetchSWR<TodoType>("todos");
 
   // const [select, setSelect] = useState({
   //   selectedRowKeys: [],
@@ -52,6 +37,20 @@ function TableTodo() {
     modalRef.current?.openMyModal();
   }
 
+  async function handleDelete(record: TodoType) {
+    try {
+      const res = await fetch(`todos/${record.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      mutate();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const columns: ColumnsType<TodoType> = [
     {
       title: `${t("todo")}`,
@@ -65,16 +64,20 @@ function TableTodo() {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => handleEditRow(record)}>{t("editTodo")}</a>
+          <a onClick={() => handleDelete(record)}>{t("Delete")}</a>
         </Space>
       ),
     },
   ];
+
   return (
     <>
       <Table
         columns={columns}
+        //@ts-ignore
         dataSource={data}
         // rowSelection={rowSelection}
+        loading={isLoading}
       />
       <ModalForm ref={modalRef} dataTodo={editData} />
     </>
