@@ -8,6 +8,9 @@ import { Form, Modal, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../../types/todo";
+import { v4 as uuidv4 } from "uuid";
+import { useFetchSWR } from "../../hooks/useFetchSWR";
+import api from "../../services/api";
 
 export interface ModalHandles {
   openMyModal: () => {};
@@ -24,6 +27,8 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   const { t } = useTranslation();
   const [form] = useForm();
 
+  const { mutate } = useFetchSWR("todos");
+
   const openMyModal = useCallback(() => {
     setIsModalOpen(true);
   }, []);
@@ -38,14 +43,39 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
     };
   });
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    setIsModalOpen(false);
+  const onFinish = async (values: any) => {
+    try {
+      const id = uuidv4();
+      if (dataTodo) {
+        await api.patch(`todos/${dataTodo.id}`, {
+          todo: `${values.todo}`,
+          completed: false,
+        });
+      } else {
+        await api.post("todos", {
+          id: `${id}`,
+          key: `${id}`,
+          todo: `${values.todo}`,
+          completed: false,
+        });
+      }
+      form.resetFields();
+      setIsModalOpen(false);
+      mutate();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (dataTodo) {
+    form.setFieldsValue({
+      todo: dataTodo.todo,
+    });
+  }
 
   return (
     <>
@@ -54,7 +84,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         open={isModalOpen}
         onOk={form.submit}
         onCancel={closeMyModal}
-      >        
+      >
         <Form
           name="Form Todo"
           labelCol={{ span: 5 }}
