@@ -5,13 +5,14 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Form, Modal, Input } from "antd";
+import { Form, Modal, Input, DatePicker } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../../types/todo";
 import { v4 as uuidv4 } from "uuid";
 import { useFetchSWR } from "../../hooks/useFetchSWR";
 import api from "../../services/api";
+import dayjs from "dayjs";
 
 export interface ModalHandles {
   openMyModal: () => {};
@@ -28,7 +29,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   const { t } = useTranslation();
   const [form] = useForm();
 
-  const { mutate } = useFetchSWR("todos");
+  const { mutate } = useFetchSWR(`todos/?_sort=create_at&_order=desc&_page=1`);
 
   const openMyModal = useCallback(() => {
     setIsModalOpen(true);
@@ -48,6 +49,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
     if (dataTodo) {
       form.setFieldsValue({
         todo: dataTodo.todo,
+        dateDoTodo: dayjs(+dataTodo.dateDoTodo),
       });
     }
   }, [dataTodo]);
@@ -58,6 +60,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
       if (dataTodo) {
         await api.patch(`todos/${dataTodo.id}`, {
           todo: `${values.todo}`,
+          dateDoTodo: `${Date.parse(values.dateDoTodo)}`,
           completed: false,
         });
       } else {
@@ -65,6 +68,8 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
           id: `${id}`,
           key: `${id}`,
           todo: `${values.todo}`,
+          create_at: `${Date.now()}`,
+          dateDoTodo: `${Date.parse(values.dateDoTodo)}`,
           completed: false,
         });
       }
@@ -104,6 +109,13 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
             rules={[{ required: true, message: `${t("todoInputError")}` }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            label={`${t("Date")}`}
+            name="dateDoTodo"
+            rules={[{ required: true, message: `${t("todoInputError")}` }]}
+          >
+            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
           </Form.Item>
         </Form>
       </Modal>
