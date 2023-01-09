@@ -78,7 +78,7 @@ function TableTodo() {
       },
     },
     {
-      title: `${t("Date To Make")}`,
+      title: `${t("dateComplet")}`,
       dataIndex: "dateDoTodo",
       key: "dateDoTodo",
       sorter: (a, b, c) => {
@@ -91,16 +91,16 @@ function TableTodo() {
       },
     },
     {
-      title: "Action",
+      title: `${t("actionTable")}`,
       key: "action",
       render: (_, record) => (
         <Space size="middle">
           <Popconfirm
-            title="Sure to delete?"
+            title={t("deleteConfirm")}
             onConfirm={() => handleDelete(record)}
           >
             <Button danger icon={<DeleteOutlined />}>
-              {t("Delete")}
+              {t("delete")}
             </Button>
           </Popconfirm>
           <Button

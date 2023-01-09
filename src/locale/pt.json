@@ -4,7 +4,11 @@
     "newTodo": "Add Nova Tafefa",
     "todoInputError": "Por favor, insira sua tarefa!",
     "todo": "Tarefa",
-    "editTodo": "Editar"
+    "editTodo": "Editar",
+    "delete": "Excluir",
+    "deleteConfirm": "Deseja excluir?",
+    "dateComplet": "Data para fazer",
+    "actionTable": "Ação"
 
   }
 }

@@ -4,6 +4,10 @@
     "newTodo": "Add New To Do",
     "todoInputError": "Please input your todo!",
     "todo": "Todo",
-    "editTodo": "Edit"
+    "editTodo": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Sure to delete?",
+    "dateComplet": "Date to do",
+    "actionTable": "Action"
   }
 }
