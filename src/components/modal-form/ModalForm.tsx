@@ -3,6 +3,7 @@ import React, {
   useCallback,
   forwardRef,
   useImperativeHandle,
+  useEffect,
 } from "react";
 import { Form, Modal, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -43,6 +44,14 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
     };
   });
 
+  useEffect(() => {
+    if (dataTodo) {
+      form.setFieldsValue({
+        todo: dataTodo.todo,
+      });
+    }
+  }, [dataTodo]);
+
   const onFinish = async (values: any) => {
     try {
       const id = uuidv4();
@@ -70,12 +79,6 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-
-  if (dataTodo) {
-    form.setFieldsValue({
-      todo: dataTodo.todo,
-    });
-  }
 
   return (
     <>
