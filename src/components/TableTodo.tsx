@@ -7,15 +7,23 @@ import { TodoType } from "../types/todo";
 import { useFetchSWR } from "../hooks/useFetchSWR";
 import api from "../services/api";
 
-function TableTodo() {  
+function TableTodo() {
   const [editData, setEditData] = useState<TodoType | null>();
   const { t } = useTranslation();
 
-  const { data, isLoading, mutate } = useFetchSWR<TodoType[]>("todos");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const { data, isLoading, mutate } = useFetchSWR(
+    `todos/?_page=${currentPage}`
+  );
+  const [dataTeste, setDataTeste] = useState<TodoType[]>([]);
+  const [totalPages, setTotalPages] = useState<number>();
 
   useEffect(() => {
-
-  }, []);
+    if (data) {
+      setDataTeste(data.data);
+      setTotalPages(+data.headers.get("x-total-count"));
+    }
+  }, [totalPages, data]);
 
   const modalRef = useRef<ModalHandles>(null);
 
@@ -36,7 +44,7 @@ function TableTodo() {
   async function handleCompleted(record: TodoType) {
     try {
       api.patch(`todos/${record.id}`, {
-        completed: true
+        completed: true,
       });
       mutate();
     } catch (error) {
@@ -67,11 +75,16 @@ function TableTodo() {
   return (
     <>
       <Table
-        columns={columns}
-        //@ts-ignore
-        dataSource={data}
-        // rowSelection={rowSelection}
+        columns={columns}        
+        dataSource={dataTeste}        
         loading={isLoading}
+        pagination={{
+          pageSize: 10,
+          total: totalPages,
+          onChange(page) {
+            setCurrentPage(page);
+          },
+        }}
       />
       <ModalForm ref={modalRef} dataTodo={editData} />
     </>
