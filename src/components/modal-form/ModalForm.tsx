@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Form, Modal, Input, DatePicker } from "antd";
+import { Form, Modal, Input, DatePicker, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../../types/todo";
@@ -26,6 +26,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   ref
 ) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const { t } = useTranslation();
   const [form] = useForm();
 
@@ -56,6 +57,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
 
   const onFinish = async (values: any) => {
     try {
+      setLoading(true)
       const id = uuidv4();
       if (dataTodo) {
         await api.patch(`todos/${dataTodo.id}`, {
@@ -73,10 +75,14 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
           completed: false,
         });
       }
-      form.resetFields();
-      setIsModalOpen(false);
-      mutate();
+      setTimeout(() => {
+        setLoading(false)
+        form.resetFields();
+        setIsModalOpen(false);
+        mutate();
+      }, 1000);
     } catch (error) {
+      setLoading(false)
       console.log(error);
     }
   };
@@ -88,10 +94,17 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   return (
     <>
       <Modal
-        title="New Todo"
-        open={isModalOpen}
-        onOk={form.submit}
+        title={dataTodo ? `${t("formEditTodo")}` : `${t("formNewTodo")}`}
+        open={isModalOpen}        
         onCancel={closeMyModal}
+        footer={[
+          <Button key="back" onClick={closeMyModal}>
+            Return
+          </Button>,
+          <Button key="submit" type="primary" loading={loading} onClick={form.submit}>
+            Submit
+          </Button>,          
+        ]}
       >
         <Form
           name="Form Todo"
