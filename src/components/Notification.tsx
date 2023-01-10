@@ -58,8 +58,6 @@ const Notification: React.ForwardRefRenderFunction<NotificationHandles> = (
       }
       closeMyNotification();
     }
-
-    console.log(contextHolder);
   }, [openNotification]);
 
   return <div>{contextHolder}</div>;
