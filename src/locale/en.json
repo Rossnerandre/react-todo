@@ -8,6 +8,9 @@
     "delete": "Delete",
     "deleteConfirm": "Sure to delete?",
     "dateComplet": "Date to do",
-    "actionTable": "Action"
+    "actionTable": "Action",
+    "addTodo": "Add",
+    "formEditTodo": "Edit To do",
+    "formNewTodo": "New To do"
   }
 }

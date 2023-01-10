@@ -8,7 +8,10 @@
     "delete": "Excluir",
     "deleteConfirm": "Deseja excluir?",
     "dateComplet": "Data para fazer",
-    "actionTable": "Ação"
+    "actionTable": "Ação",
+    "addTodo": "Salvar",
+    "formEditTodo": "Edição de tarefa",
+    "formNewTodo": "Nova de tarefa"
 
   }
 }
