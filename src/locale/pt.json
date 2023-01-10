@@ -11,7 +11,11 @@
     "actionTable": "Ação",
     "addTodo": "Salvar",
     "formEditTodo": "Edição de tarefa",
-    "formNewTodo": "Nova de tarefa"
-
+    "formNewTodo": "Nova de tarefa",
+    "sucessUpdate": "Atualizado com sucesso",
+    "sucessCreate": "Criado com sucesso",
+    "sucessDelete": "Excluído com sucesso",
+    "errorDelete": "Erro ao excluir",
+    "errorUpdate": "Erro ao atualizar"
   }
 }

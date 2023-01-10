@@ -11,6 +11,11 @@
     "actionTable": "Action",
     "addTodo": "Add",
     "formEditTodo": "Edit To do",
-    "formNewTodo": "New To do"
+    "formNewTodo": "New To do",
+    "sucessUpdate": "Successfully updated",
+    "sucessCreate": "Successfully created",
+    "sucessDelete": "Successfully deleted",
+    "errorDelete": "Error deleting",
+    "errorUpdate": "Error when updating"
   }
 }
