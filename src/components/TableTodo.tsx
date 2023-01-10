@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from "react";
-import { Button, Popconfirm, Space, Switch, Table } from "antd";
+import { Button, Popconfirm, Space, Switch, Table, notification } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import ModalForm, { ModalHandles } from "./modal-form/ModalForm";
 import { useTranslation } from "react-i18next";
@@ -9,8 +9,10 @@ import api from "../services/api";
 import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { SorterResult } from "antd/es/table/interface";
+import Notification, { NotificationHandles } from "./Notification";
 
 function TableTodo() {
+  const [apitest] = notification.useNotification();
   const { t } = useTranslation();
   const [editData, setEditData] = useState<TodoType | null>();
 
@@ -23,6 +25,7 @@ function TableTodo() {
   );
 
   const modalRef = useRef<ModalHandles>(null);
+  const notificationRef = useRef<NotificationHandles>(null);
 
   function handleEditRow(record: TodoType) {
     setEditData(record);
@@ -34,7 +37,12 @@ function TableTodo() {
       try {
         api.delete(`todos/${record.id}`);
         mutate();
+        notificationRef.current?.openMyNotification(
+          "sucess",
+          `${t('sucessDelete')}`
+        );
       } catch (error) {
+        notificationRef.current?.openMyNotification("error", `${t('errorDelete')}`);
         console.log(error);
       }
       return;
@@ -44,7 +52,15 @@ function TableTodo() {
         completed: true,
       });
       mutate();
+      notificationRef.current?.openMyNotification(
+        "sucess",
+        `${t('sucessUpdate')}`
+      );
     } catch (error) {
+      notificationRef.current?.openMyNotification(
+        "sucess",
+        `${t('errorUpdate')}`
+      );
       console.log(error);
     }
   }
@@ -127,6 +143,7 @@ function TableTodo() {
         }}
       />
       <ModalForm ref={modalRef} dataTodo={editData} />
+      <Notification ref={notificationRef} />
     </div>
   );
 }

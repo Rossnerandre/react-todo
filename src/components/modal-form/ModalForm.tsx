@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useEffect,
+  useRef,
 } from "react";
 import { Form, Modal, Input, DatePicker, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -13,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useFetchSWR } from "../../hooks/useFetchSWR";
 import api from "../../services/api";
 import dayjs from "dayjs";
+import Notification, { NotificationHandles } from "../Notification";
 
 export interface ModalHandles {
   openMyModal: () => {};
@@ -26,9 +28,11 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   ref
 ) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const [form] = useForm();
+
+  const notificationRef = useRef<NotificationHandles>(null);
 
   const { mutate } = useFetchSWR(`todos/?_sort=create_at&_order=desc&_page=1`);
 
@@ -57,7 +61,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
 
   const onFinish = async (values: any) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const id = uuidv4();
       if (dataTodo) {
         await api.patch(`todos/${dataTodo.id}`, {
@@ -76,13 +80,24 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         });
       }
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
         form.resetFields();
         setIsModalOpen(false);
+        if (dataTodo) {
+          notificationRef.current?.openMyNotification(
+            "sucess",
+            `${t('sucessUpdate')}`
+          );
+        } else {
+          notificationRef.current?.openMyNotification(
+            "sucess",
+            `${t('sucessCreate')}`
+          );
+        }
         mutate();
       }, 1000);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.log(error);
     }
   };
@@ -95,15 +110,20 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
     <>
       <Modal
         title={dataTodo ? `${t("formEditTodo")}` : `${t("formNewTodo")}`}
-        open={isModalOpen}        
+        open={isModalOpen}
         onCancel={closeMyModal}
         footer={[
           <Button key="back" onClick={closeMyModal}>
             Return
           </Button>,
-          <Button key="submit" type="primary" loading={loading} onClick={form.submit}>
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={form.submit}
+          >
             Submit
-          </Button>,          
+          </Button>,
         ]}
       >
         <Form
@@ -132,6 +152,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
           </Form.Item>
         </Form>
       </Modal>
+      <Notification ref={notificationRef} />
     </>
   );
 };
