@@ -6,7 +6,7 @@ import { ConfigProvider, theme } from "antd";
 const { defaultAlgorithm, darkAlgorithm, useToken } = theme;
 
 const Main = styled("main", {
-  minHeight: "calc(100vh - 82px)",
+  height: "calc(100vh - 82px)",
   width: "100%",
   textAlign: "center",
   padding: "40px 0",
