@@ -117,7 +117,7 @@ function TableTodo() {
         ),
       },
     ],
-    []
+    [t]
   );
 
   return (
