@@ -39,6 +39,7 @@
     "registerNow": "Register now!",
     "or": "Or",
     "titleWelcomeBack": "Welcome back!",
-    "titleRegisterUser": "Register user"
+    "titleRegisterUser": "Register user",
+    "emailInUse": "Email is registered, please check email!"
   }
 }

@@ -1,7 +1,7 @@
 {
   "translation": {
     "header": "React Lista de tarefas",
-    "newTodo": "Add Nova Tafefa",
+    "newTodo": "Adicionar Nova Tafefa",
     "todoInputError": "Por favor, insira sua tarefa!",
     "todo": "Tarefa",
     "editTodo": "Editar",
@@ -39,6 +39,7 @@
     "registerNow": "Registrar agora!",
     "or": "Ou",
     "titleWelcomeBack": "Bem vindo de volta!",
-    "titleRegisterUser": "Registrar usuário"
+    "titleRegisterUser": "Registrar usuário",
+    "emailInUse": "Email está cadastrado, por favor verifique o email!"
   }
 }
