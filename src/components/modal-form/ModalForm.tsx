@@ -36,7 +36,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
 
   const notificationRef = useRef<NotificationHandles>(null);
 
-  const { mutate } = useFetchSWR(`todos/?idUser=${idUser}_sort=create_at&_order=desc&_page=1`);
+  const { mutate } = useFetchSWR(`todos/?idUser=${idUser}&_sort=create_at&_order=desc&_page=1`);
 
   const openMyModal = useCallback(() => {
     setIsModalOpen(true);
