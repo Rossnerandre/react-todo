@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { styled } from "@stitches/react";
-import useThemeStore from "../store/themeStore";
+import useConfigStore from "../store/configStore";
 import type { MenuProps } from "antd";
 import { theme, Typography, Dropdown, Button, Switch } from "antd";
 const { useToken } = theme;
@@ -12,17 +12,18 @@ import {
 } from "react-icons/md";
 import useLoginStore from "../store/loginStore";
 import useAuth from "../hooks/useAuth";
+import useConfigs from "../hooks/useConfigs";
 
 const StyledHeader = styled("header", {
   height: 82,
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-  flexBasis: "50%",
 });
 
 export function Header() {
-  const { theme, setTheme } = useThemeStore();
+  const { theme } = useConfigStore();
+  const { ChangeLanguage, ChangeTheme } = useConfigs();
   const { nicknameUser } = useLoginStore();
   const { logout } = useAuth();
   const { t } = useTranslation();
@@ -36,19 +37,25 @@ export function Header() {
         <Switch
           checkedChildren={<MdOutlineLightMode />}
           unCheckedChildren={<MdOutlineDarkMode />}
-          onChange={() => setTheme()}
+          onChange={() => ChangeTheme()}
           checked={theme === "light" ? true : false}
         />
       ),
     },
     {
       key: "2",
-      label: <Button>En/pt</Button>,
+      style: { textAlign: "center" },
+      label: <Button onClick={() => ChangeLanguage()}>En/pt</Button>,
     },
     {
       key: "3",
+      style: { textAlign: "center" },
       label: (
-        <>{nicknameUser && <Button onClick={() => logout()}>Logout</Button>} </>
+        <>
+          {nicknameUser && (
+            <Button onClick={() => logout()}>{t("logout")}</Button>
+          )}
+        </>
       ),
     },
   ];
@@ -62,7 +69,9 @@ export function Header() {
       }}
     >
       <div>
-        <Title level={2}>{t("header")}</Title>
+        <Title level={2} style={{ margin: 0 }}>
+          {t("header")}
+        </Title>
       </div>
       <div
         style={{
@@ -72,7 +81,9 @@ export function Header() {
         }}
       >
         {nicknameUser && (
-          <Text style={{ paddingRight: 20 }}>Welcome {nicknameUser}</Text>
+          <Text style={{ paddingRight: 20, fontSize: 16 }}>
+            {t("greetings")} {nicknameUser}
+          </Text>
         )}
         <Dropdown menu={{ items }} placement="bottom" arrow>
           <Button style={{ paddingBottom: "0" }}>
