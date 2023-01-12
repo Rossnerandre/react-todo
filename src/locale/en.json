@@ -41,6 +41,7 @@
     "or": "Or",
     "titleWelcomeBack": "Welcome back!",
     "titleRegisterUser": "Register user",
-    "emailInUse": "Email already registered!"
+    "emailInUse": "Email already registered!",
+    "internalServerError": "Internal server error, please try again later."
   }
 }

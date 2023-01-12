@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 
 const CardForm = styled("div", {
   h1: {
-    marginBottom: 60,
+    marginBottom: 15,
   },
   height: "100%",
   display: "flex",
@@ -38,13 +38,23 @@ export default function Register() {
     setLoading(true);
     setTimeout(async () => {
       try {
-        await register(values.email, values.password, values.username);
+        const response = await register(
+          values.email,
+          values.password,
+          values.username
+        );
+        if (response === "E-mails already registered!") {
+          throw new Error("E-mails already registered!");
+        }
+        return nav("/todos");
+      } catch (error: any) {
+        if (error.message === "E-mails already registered!") {
+          setMessageError(`${t("emailInUse")}`);
+          return;
+        }
+        setMessageError(`${t("internalServerError")}`);
+      } finally {
         setLoading(false);
-        return nav('/todos')
-      } catch (error) {
-        setLoading(false);
-        setMessageError(`${t("emailInUse")}`);
-        console.log("error", error);
       }
     }, 2000);
   };
@@ -56,7 +66,7 @@ export default function Register() {
         name="registerForm"
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onSubmitCapture={()=>setMessageError(null)}
+        onSubmitCapture={() => setMessageError(null)}
       >
         <Form.Item
           name="username"
@@ -144,7 +154,11 @@ export default function Register() {
             placeholder={`${t("passwordConfirm")}`}
           />
         </Form.Item>
-        {messageError && <Text type="danger">{messageError}</Text>}
+        {messageError && (
+          <Text style={{ marginBottom: 12 }} type="danger">
+            {messageError}
+          </Text>
+        )}
         <Form.Item>
           <Button
             type="primary"

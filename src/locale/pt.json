@@ -41,6 +41,7 @@
     "or": "Ou",
     "titleWelcomeBack": "Bem vindo de volta!",
     "titleRegisterUser": "Registrar usuário",
-    "emailInUse": "Email está cadastrado!"
+    "emailInUse": "Email está cadastrado!",
+    "internalServerError": "Erro no servidor interno, por favor tente mais tarde."
   }
 }

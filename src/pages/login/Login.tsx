@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 
 const CardForm = styled("div", {
   h1: {
-    marginBottom: 60,
+    marginBottom: 15,
   },
   height: "100%",
   display: "flex",
@@ -24,7 +24,6 @@ const CardForm = styled("div", {
   ".login-form-button ": {
     width: "100%",
     marginBottom: 12,
-    marginTop: 12,
   },
 });
 
@@ -46,11 +45,17 @@ export default function Login() {
     setLoading(true);
     setTimeout(async () => {
       try {
-        await login(values.email, values.password);
+        const response = await login(values.email, values.password);
+        if (response === "Email or pass don't match") {
+          throw new Error(response);
+        }
         return nav("/todos");
-      } catch (error) {
-        setMessageError(`${t("invalidAccess")}`);
-        console.log("error", error);
+      } catch (error: any) {
+        if (error.message === "Email or pass don't match") {
+          setMessageError(`${t("invalidAccess")}`);
+          return;
+        }
+        setMessageError(`${t("internalServerError")}`);
       } finally {
         setLoading(false);
       }
@@ -110,7 +115,11 @@ export default function Login() {
             placeholder={`${t("password")}`}
           />
         </Form.Item>
-        {messageError && <Text type="danger">{messageError}</Text>}
+        {messageError && (
+          <Text style={{ marginBottom: 12 }} type="danger">
+            {messageError}
+          </Text>
+        )}
         <Form.Item>
           <Button
             type="primary"

@@ -17,20 +17,24 @@ export default function useAuth() {
   };
 
   const login = async (email: string, password: string) => {
-    const { data } = await api.get(`users?email=${email}`);
-    if (data.length > 0) {
-      if (data[0].password == password) {
-        setItems([
-          { key: "username", value: data[0].user },
-          { key: "idUser", value: data[0].id },
-          { key: "isAuthenticated", value: "true" },
-        ]);
-        setAuthenticated(data[0].user, true, data[0].id);
-        return data.status;
+    try {
+      const { data } = await api.get(`users?email=${email}`);
+      if (data.length > 0) {
+        if (data[0].password == password) {
+          setItems([
+            { key: "username", value: data[0].user },
+            { key: "idUser", value: data[0].id },
+            { key: "isAuthenticated", value: "true" },
+          ]);
+          setAuthenticated(data[0].user, true, data[0].id);
+          return data.status;
+        }
+        return "Email or pass don't match";
       }
-      throw new Error("Email or pass don't match");
+      return "Email or pass don't match";
+    } catch (error) {
+      throw new Error("Internal server error");
     }
-    throw new Error("Email or pass don't match");
   };
 
   const register = async (
@@ -38,29 +42,33 @@ export default function useAuth() {
     username: string,
     password: string
   ) => {
-    const { data } = await api.get(`users?email=${email}`);
-    if (data.length >= 1) {
-      throw new Error("E-mail is registred!");
+    try {
+      const { data } = await api.get(`users?email=${email}`);
+      if (data.length >= 1) {
+        return "E-mails already registered!";
+      }
+
+      const id = uuidv4();
+
+      const response = await api.post("users", {
+        user: `${username}`,
+        email: `${email}`,
+        password: `${password}`,
+        id: `${id}`,
+      });
+
+      setItems([
+        { key: "username", value: username },
+        { key: "idUser", value: id },
+        { key: "isAuthenticated", value: "true" },
+      ]);
+
+      setAuthenticated(username, true, id);
+
+      return response;
+    } catch (error) {
+      throw new Error("Internal server error");
     }
-
-    const id = uuidv4();
-
-    const response = await api.post("users", {
-      user: `${username}`,
-      email: `${email}`,
-      password: `${password}`,
-      id: `${id}`,
-    });
-
-    setItems([
-      { key: "username", value: username },
-      { key: "idUser", value: id },
-      { key: "isAuthenticated", value: "true" },
-    ]);
-
-    setAuthenticated(username, true, id);
-
-    return response;
   };
 
   return { register, autoAuth, login };
