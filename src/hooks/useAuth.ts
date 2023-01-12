@@ -5,7 +5,7 @@ import useLocalStorage from "./useLocalStorage";
 
 export default function useAuth() {
   const { setAuthenticated } = useLoginStore();
-  const { getItems, setItems } = useLocalStorage();
+  const { getItems, setItems, removeItems } = useLocalStorage();
 
   const autoAuth = () => {
     const localItems = getItems(["username", "isAuthenticated", "idUser"]);
@@ -71,5 +71,10 @@ export default function useAuth() {
     }
   };
 
-  return { register, autoAuth, login };
+  const logout = () => {
+    removeItems(["username", "idUser", "isAuthenticated"]);
+    setAuthenticated("", false, "");
+  };
+
+  return { register, autoAuth, login, logout };
 }

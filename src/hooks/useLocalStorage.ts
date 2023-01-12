@@ -13,5 +13,12 @@ export default function useLocalStorage() {
     return gitems;
   };
 
-  return { getItems, setItems };
+  const removeItems = (items: string[]) => {
+    items.map((item) => {
+      return localStorage.removeItem(item);
+    });
+    return;
+  };
+
+  return { getItems, setItems, removeItems };
 }
