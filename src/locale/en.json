@@ -42,6 +42,9 @@
     "titleWelcomeBack": "Welcome back!",
     "titleRegisterUser": "Register user",
     "emailInUse": "Email already registered!",
-    "internalServerError": "Internal server error, please try again later."
+    "internalServerError": "Internal server error, please try again later.",
+    "logout": "Logout",
+    "greetings": "Welcome: "
+
   }
 }
