@@ -47,12 +47,12 @@ export default function Login() {
     setTimeout(async () => {
       try {
         await login(values.email, values.password);
-        setLoading(false);
         return nav("/todos");
       } catch (error) {
         setMessageError(`${t("invalidAccess")}`);
-        setLoading(false);
         console.log("error", error);
+      } finally {
+        setLoading(false);
       }
     }, 2000);
   };
