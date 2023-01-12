@@ -117,7 +117,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         onCancel={closeMyModal}
         footer={[
           <Button key="back" onClick={closeMyModal}>
-            Return
+            {t('cancel')}
           </Button>,
           <Button
             key="submit"
@@ -125,7 +125,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
             loading={loading}
             onClick={form.submit}
           >
-            Submit
+            {t('addTodo')}
           </Button>,
         ]}
       >

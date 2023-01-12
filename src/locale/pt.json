@@ -1,7 +1,7 @@
 {
   "translation": {
     "header": "React Lista de tarefas",
-    "newTodo": "Adicionar Nova Tafefa",
+    "newTodo": "Adicionar nova tafefa",
     "todoInputError": "Por favor, insira sua tarefa!",
     "todo": "Tarefa",
     "editTodo": "Editar",
@@ -10,6 +10,7 @@
     "dateComplet": "Data para fazer",
     "actionTable": "Ação",
     "addTodo": "Salvar",
+    "cancel": "Cancelar",
     "formEditTodo": "Edição de tarefa",
     "formNewTodo": "Nova de tarefa",
     "sucessUpdate": "Atualizado com sucesso",
@@ -18,7 +19,7 @@
     "errorDelete": "Erro ao excluir",
     "errorUpdate": "Erro ao atualizar",
     "errorEmailRequired": "Por favor, insira seu e-mail!",
-    "errorEmailInvalid": "Digite um email válido!",
+    "errorEmailInvalid": "Digite um e-mail válido!",
     "errorUsernameRequired": "Por favor, insira seu nome de usuário!",
     "errorPasswordRequired": "Por favor, insira sua senha!",
     "mustContainCapital": "Deve conter ao menos uma letra maiúscula",
@@ -26,20 +27,20 @@
     "mustContainNumber": "Deve conter pelo menos um número",
     "mustContainSpecial": "Deve conter pelo menos um caractere especial: ! @ # $ % &",
     "mustContain8": "Deve conter pelo menos 8 caracteres",
-    "invalidAccess": "E-mail e/senha não coincidem",
+    "invalidAccess": "E-mail e/senha não correspondem",
     "password": "Senha",
     "passwordConfirm": "Confirme a senha",
     "passwordConfirmRequired": "Por favor, confirme sua senha",
     "passwordConfirmNotMatch": "As duas senhas que você digitou não correspondem!",
     "username": "Nome de usuário",
     "signIn": "Entrar",
-    "signInNow": "Sign In now!",
+    "signInNow": "entrar agora!",
     "signOut": "Sair",
     "register": "Registrar",
-    "registerNow": "Registrar agora!",
+    "registerNow": "registrar agora!",
     "or": "Ou",
     "titleWelcomeBack": "Bem vindo de volta!",
     "titleRegisterUser": "Registrar usuário",
-    "emailInUse": "Email está cadastrado, por favor verifique o email!"
+    "emailInUse": "Email está cadastrado!"
   }
 }
