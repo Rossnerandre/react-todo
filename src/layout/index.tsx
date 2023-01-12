@@ -1,8 +1,11 @@
 import { Header } from "./Header";
 import { Outlet } from "react-router-dom";
 import { styled } from "@stitches/react";
-import useThemeStore from "../store/themeStore";
+import useConfigStore from "../store/configStore";
 import { ConfigProvider, theme } from "antd";
+import useConfigs from "../hooks/useConfigs";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 const { defaultAlgorithm, darkAlgorithm, useToken } = theme;
 
 const Main = styled("main", {
@@ -13,19 +16,32 @@ const Main = styled("main", {
 });
 
 function MyLayout() {
-  const store = useThemeStore();
+  const { verifyConfig } = useConfigs();
+  const { theme, language } = useConfigStore();
   const { token } = useToken();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    verifyConfig();
+  }, []);
+
+  useEffect(() => {
+    if (language !== "") {
+      i18n.changeLanguage(language);
+    }
+  }, [language]);
+
   return (
     <ConfigProvider
       theme={{
-        algorithm: store.theme === "light" ? defaultAlgorithm : darkAlgorithm,
+        algorithm: theme === "light" ? defaultAlgorithm : darkAlgorithm,
       }}
     >
       <Header />
       <Main
         style={{
           backgroundColor: `${
-            store.theme === "light" ? token.colorPrimaryBg : "#333"
+            theme === "light" ? token.colorPrimaryBg : "#333"
           }`,
         }}
       >
