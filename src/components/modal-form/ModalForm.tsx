@@ -15,6 +15,7 @@ import { useFetchSWR } from "../../hooks/useFetchSWR";
 import api from "../../services/api";
 import dayjs from "dayjs";
 import Notification, { NotificationHandles } from "../Notification";
+import useLoginStore from "../../store/loginStore";
 
 export interface ModalHandles {
   openMyModal: () => {};
@@ -31,10 +32,11 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const [form] = useForm();
+  const { idUser } = useLoginStore();
 
   const notificationRef = useRef<NotificationHandles>(null);
 
-  const { mutate } = useFetchSWR(`todos/?_sort=create_at&_order=desc&_page=1`);
+  const { mutate } = useFetchSWR(`todos/?idUser=${idUser}_sort=create_at&_order=desc&_page=1`);
 
   const openMyModal = useCallback(() => {
     setIsModalOpen(true);
@@ -76,6 +78,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
           todo: `${values.todo}`,
           create_at: `${Date.now()}`,
           dateDoTodo: `${Date.parse(values.dateDoTodo)}`,
+          idUser: `${idUser}`,
           completed: false,
         });
       }
@@ -86,12 +89,12 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         if (dataTodo) {
           notificationRef.current?.openMyNotification(
             "sucess",
-            `${t('sucessUpdate')}`
+            `${t("sucessUpdate")}`
           );
         } else {
           notificationRef.current?.openMyNotification(
             "sucess",
-            `${t('sucessCreate')}`
+            `${t("sucessCreate")}`
           );
         }
         mutate();

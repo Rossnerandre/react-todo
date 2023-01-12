@@ -10,8 +10,11 @@ import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { SorterResult } from "antd/es/table/interface";
 import Notification, { NotificationHandles } from "./Notification";
+import useLoginStore from "../store/loginStore";
+
 
 function TableTodo() {
+  const {idUser} = useLoginStore()
   const { t } = useTranslation();
   const [editData, setEditData] = useState<TodoType | null>();
 
@@ -20,7 +23,7 @@ function TableTodo() {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const { data, mutate, isLoading } = useFetchSWR(
-    `todos/?_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
+    `todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
   );
 
   const modalRef = useRef<ModalHandles>(null);
