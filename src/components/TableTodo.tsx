@@ -21,12 +21,16 @@ function TableTodo() {
   const [orderColumn, setOrderColumn] = useState<string>("create_at");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const { data, mutate, isLoading } = useFetchSWR(`todos`, {
-    idUser,
-    _sort: orderColumn,
-    _order: order,
-    _page: currentPage,
-  });
+  // const { data, mutate, isLoading } = useFetchSWR(`todos`, {
+  //   idUser,
+  //   _sort: orderColumn,
+  //   _order: order,
+  //   _page: currentPage,
+  // });
+
+  const { data, mutate, isLoading } = useFetchSWR(
+    `/todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
+  );
 
   const modalRef = useRef<ModalHandles>(null);
   const notificationRef = useRef<NotificationHandles>(null);
@@ -129,6 +133,7 @@ function TableTodo() {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Table
         style={{ width: "700px" }}
+        size="small"
         bordered
         columns={columns}
         dataSource={data ? data.data : []}
@@ -141,6 +146,7 @@ function TableTodo() {
             return;
           }
           setOrderColumn("create_at");
+          setOrder("desc");
         }}
         rowKey="id"
         pagination={{
