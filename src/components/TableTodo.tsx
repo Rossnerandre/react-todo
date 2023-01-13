@@ -12,9 +12,8 @@ import { SorterResult } from "antd/es/table/interface";
 import Notification, { NotificationHandles } from "./Notification";
 import useLoginStore from "../store/loginStore";
 
-
 function TableTodo() {
-  const {idUser} = useLoginStore()
+  const { idUser } = useLoginStore();
   const { t } = useTranslation();
   const [editData, setEditData] = useState<TodoType | null>();
 
@@ -22,9 +21,12 @@ function TableTodo() {
   const [orderColumn, setOrderColumn] = useState<string>("create_at");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const { data, mutate, isLoading } = useFetchSWR(
-    `todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
-  );
+  const { data, mutate, isLoading } = useFetchSWR(`todos`, {
+    idUser,
+    _sort: orderColumn,
+    _order: order,
+    _page: currentPage,
+  });
 
   const modalRef = useRef<ModalHandles>(null);
   const notificationRef = useRef<NotificationHandles>(null);
@@ -75,7 +77,7 @@ function TableTodo() {
       {
         title: `${t("todo")}`,
         dataIndex: "todo",
-        key: "todo",        
+        key: "todo",
         sorter: true,
         render: (text, record) => {
           return !record.completed ? <p>{text}</p> : <s>{text}</s>;
