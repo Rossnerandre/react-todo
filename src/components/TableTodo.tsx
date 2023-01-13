@@ -1,5 +1,5 @@
-import { useState, useRef, useMemo } from "react";
-import { Button, Popconfirm, Space, Switch, Table } from "antd";
+import { useState, useRef, useMemo, useEffect } from "react";
+import { Button, Popconfirm, Space, Switch, Table, Input, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import ModalForm, { ModalHandles } from "./modal-form/ModalForm";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,11 @@ import { TodoType } from "../types/todo";
 import { useFetchSWR } from "../hooks/useFetchSWR";
 import api from "../services/api";
 import dayjs from "dayjs";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { SorterResult } from "antd/es/table/interface";
 import Notification, { NotificationHandles } from "./Notification";
 import useLoginStore from "../store/loginStore";
@@ -16,6 +20,8 @@ function TableTodo() {
   const { idUser } = useLoginStore();
   const { t } = useTranslation();
   const [editData, setEditData] = useState<TodoType | null>();
+
+  const [filters, setFilters] = useState("");
 
   const [order, setOrder] = useState<string>("desc");
   const [orderColumn, setOrderColumn] = useState<string>("create_at");
@@ -28,9 +34,29 @@ function TableTodo() {
   //   _page: currentPage,
   // });
 
-  const { data, mutate, isLoading } = useFetchSWR(
+  const [url, setUrl] = useState(
     `/todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
   );
+
+  useEffect(() => {
+    if (filters.trim().length > 0) {
+      setUrl(
+        `/todos/?idUser=${idUser}&todo_like=${filters}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
+      );
+    } else {
+      setUrl(
+        `/todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
+      );
+    }
+  }, [orderColumn, order, currentPage, filters]);
+
+  const { data, mutate, isLoading } = useFetchSWR(url);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setFilters(() => e.target.value);
+    console.log(filters);
+  };
 
   const modalRef = useRef<ModalHandles>(null);
   const notificationRef = useRef<NotificationHandles>(null);
@@ -91,6 +117,7 @@ function TableTodo() {
         title: `${t("dateComplet")}`,
         dataIndex: "dateDoTodo",
         key: "dateDoTodo",
+        width: 200,
         sorter: true,
         render: (text) => {
           const dateFormat = dayjs(+text).format("DD/MM/YYYY HH:mm:ss");
@@ -100,28 +127,32 @@ function TableTodo() {
       {
         title: `${t("actionTable")}`,
         key: "action",
+        align: "center",
+        width: 170,
         render: (_, record) => (
           <Space size="middle">
-            <Popconfirm
-              title={t("deleteConfirm")}
-              onConfirm={() => handleAction(record, "delete")}
-            >
-              <Button danger icon={<DeleteOutlined />}>
-                {t("delete")}
-              </Button>
-            </Popconfirm>
-            <Button
-              onClick={() => handleEditRow(record)}
-              icon={<EditOutlined />}
-              disabled={record.completed}
-            >
-              {t("editTodo")}
-            </Button>
-            <Switch
-              disabled={record.completed}
-              checked={record.completed}
-              onClick={() => handleAction(record, "complete")}
-            />
+            <Tooltip title={`${t("deleteTodo")}`}>
+              <Popconfirm
+                title={t("deleteConfirm")}
+                onConfirm={() => handleAction(record, "delete")}
+              >
+                <Button danger icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+            <Tooltip title={`${t("editTodo")}`}>
+              <Button
+                onClick={() => handleEditRow(record)}
+                icon={<EditOutlined />}
+                disabled={record.completed}
+              />
+            </Tooltip>
+            <Tooltip title={record.completed ? t("doneTodo") : t("finishTodo")}>
+              <Switch
+                disabled={record.completed}
+                checked={record.completed}
+                onClick={() => handleAction(record, "complete")}
+              />
+            </Tooltip>
           </Space>
         ),
       },
@@ -130,7 +161,24 @@ function TableTodo() {
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        width: "100%",
+      }}
+    >
+      <div style={{ width: "100%" }}>
+        <Input
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearch(e)}
+          placeholder={`${t("searchTodo")}`}
+          style={{ maxWidth: "700px" }}
+          prefix={<SearchOutlined />}
+        />
+        <br />
+        <br />
+      </div>
       <Table
         style={{ width: "700px" }}
         size="small"
@@ -139,7 +187,9 @@ function TableTodo() {
         dataSource={data ? data.data : []}
         expandable={{
           expandedRowRender: (record) => (
-            <p style={{ marginBottom: 0, marginLeft: 15, textAlign: 'justify' }}>
+            <p
+              style={{ marginBottom: 0, marginLeft: 15, textAlign: "justify" }}
+            >
               {record.description}
             </p>
           ),
@@ -148,6 +198,7 @@ function TableTodo() {
         loading={isLoading}
         onChange={(pagination, filters, sorter) => {
           const sort = sorter as SorterResult<TodoType>;
+          console.log(filters);
           setOrderColumn(sort.field as string);
           if (sort.order !== undefined) {
             setOrder((sort.order as string) === "ascend" ? "asc" : "desc");
