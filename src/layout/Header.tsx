@@ -1,15 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { styled } from "@stitches/react";
 import useConfigStore from "../store/configStore";
+import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { theme, Typography, Dropdown, Button, Switch } from "antd";
+import { theme, Typography, Dropdown, Button, Switch, Select } from "antd";
 const { useToken } = theme;
 const { Title, Text } = Typography;
-import {
-  MdOutlineLightMode,
-  MdOutlineDarkMode,
-  MdOutlineSettings,
-} from "react-icons/md";
+import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import useLoginStore from "../store/loginStore";
 import useAuth from "../hooks/useAuth";
 import useConfigs from "../hooks/useConfigs";
@@ -22,10 +19,10 @@ const StyledHeader = styled("header", {
 });
 
 export function Header() {
-  const { theme } = useConfigStore();
-  const { ChangeLanguage, ChangeTheme } = useConfigs();
-  const { nicknameUser } = useLoginStore();
   const { logout } = useAuth();
+  const { theme } = useConfigStore();
+  const { nicknameUser } = useLoginStore();
+  const { ChangeLanguage, ChangeTheme } = useConfigs();
   const { t } = useTranslation();
   const { token } = useToken();
 
@@ -45,17 +42,26 @@ export function Header() {
     {
       key: "2",
       style: { textAlign: "center" },
-      label: <Button onClick={() => ChangeLanguage()}>En/pt</Button>,
+      disabled: true,
+      label: (
+        <Select
+          defaultValue="en"
+          style={{ width: "100%" }}
+          onChange={(e: "pt" | "en") => ChangeLanguage(e)}
+          options={[
+            { value: "en", label: "EN-Us" },
+            { value: "pt", label: "PT-Br" },
+          ]}
+        />
+      ),
     },
     {
       key: "3",
       style: { textAlign: "center" },
       label: (
-        <>
-          {nicknameUser && (
-            <Button onClick={() => logout()}>{t("logout")}</Button>
-          )}
-        </>
+        <Button icon={<LogoutOutlined />} onClick={() => logout()}>
+          {t("logout")}
+        </Button>
       ),
     },
   ];
@@ -81,15 +87,17 @@ export function Header() {
         }}
       >
         {nicknameUser && (
-          <Text style={{ paddingRight: 20, fontSize: 16 }}>
-            {t("greetings")} {nicknameUser}
-          </Text>
+          <>
+            <Text style={{ paddingRight: 20, fontSize: 16 }}>
+              {t("greetings")} {nicknameUser}
+            </Text>
+            <Dropdown menu={{ items }} placement="bottom" arrow>
+              <Button>
+                <SettingOutlined />
+              </Button>
+            </Dropdown>
+          </>
         )}
-        <Dropdown menu={{ items }} placement="bottom" arrow>
-          <Button style={{ paddingBottom: "0" }}>
-            <MdOutlineSettings size={20} />
-          </Button>
-        </Dropdown>
       </div>
     </StyledHeader>
   );
