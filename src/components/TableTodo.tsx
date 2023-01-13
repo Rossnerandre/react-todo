@@ -133,10 +133,14 @@ function TableTodo() {
         columns={columns}
         dataSource={data ? data.data : []}
         loading={isLoading}
-        onChange={(sorter) => {
+        onChange={(pagination, filters, sorter) => {
           const sort = sorter as SorterResult<TodoType>;
           setOrderColumn(sort.field as string);
-          setOrder((sort.order as string) === "ascend" ? "asc" : "desc");
+          if (sort.order !== undefined) {
+            setOrder((sort.order as string) === "ascend" ? "asc" : "desc");
+            return;
+          }
+          setOrderColumn("create_at");
         }}
         rowKey="id"
         pagination={{
