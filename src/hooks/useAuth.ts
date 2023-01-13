@@ -31,7 +31,7 @@ export default function useAuth() {
     }
   };
 
-  const login = async ({ email, password }: Omit<UserType, 'username'>) => {
+  const login = async ({ email, password }: Omit<UserType, "username">) => {
     try {
       const { data } = await api.get(`users?email=${email}`);
       if (data.length > 0) {
@@ -88,6 +88,7 @@ export default function useAuth() {
   const logout = () => {
     removeItems(["username", "idUser", "isAuthenticated"]);
     setAuthenticated("", false, "");
+    setConfig("dark", "en");
   };
 
   return { register, autoAuth, login, logout };
