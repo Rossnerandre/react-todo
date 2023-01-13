@@ -11,7 +11,7 @@ const CardForm = styled("div", {
   h1: {
     marginBottom: 15,
   },
-  height: "100%",
+  height: "calc(100vh - 164px)",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
