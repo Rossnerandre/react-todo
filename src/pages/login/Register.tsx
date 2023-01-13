@@ -169,7 +169,7 @@ export default function Register() {
             {t("register")}
           </Button>
           <div>
-            {t("or")} <a href="/">{t("signInNow")}</a>
+            {t("or")} <a style={{fontSize: 17, fontWeight: 700 }} href="/">{t("signInNow")}</a>
           </div>
         </Form.Item>
       </Form>
