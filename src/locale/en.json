@@ -4,9 +4,12 @@
     "newTodo": "Add New To Do",
     "todoInputError": "Please input your todo!",
     "todo": "Todo",
+    "searchTodo": "Search your todo",
     "description": "Description",
-    "editTodo": "Edit",
-    "delete": "Delete",
+    "editTodo": "Edit todo",
+    "deleteTodo": "Delete todo",
+    "finishTodo": "Finish todo",
+    "doneTodo": "Done",
     "deleteConfirm": "Sure to delete?",
     "dateComplet": "Date to do",
     "actionTable": "Action",
@@ -46,6 +49,5 @@
     "internalServerError": "Internal server error, please try again later.",
     "logout": "Logout",
     "greetings": "Welcome: "
-
   }
 }
