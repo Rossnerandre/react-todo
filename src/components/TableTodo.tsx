@@ -1,10 +1,10 @@
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Button, Popconfirm, Space, Switch, Table, Input, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import ModalForm, { ModalHandles } from "./modal-form/ModalForm";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../types/todo";
-import { useFetchSWR } from "../hooks/useFetchSWR";
+import { useTodos } from "../hooks/useTodos";
 import api from "../services/api";
 import dayjs from "dayjs";
 import {
@@ -27,35 +27,20 @@ function TableTodo() {
   const [orderColumn, setOrderColumn] = useState<string>("create_at");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // const { data, mutate, isLoading } = useFetchSWR(`todos`, {
-  //   idUser,
-  //   _sort: orderColumn,
-  //   _order: order,
-  //   _page: currentPage,
-  // });
-
-  const [url, setUrl] = useState(
-    `/todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
-  );
-
-  useEffect(() => {
-    if (filters.trim().length > 0) {
-      setUrl(
-        `/todos/?idUser=${idUser}&todo_like=${filters}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
-      );
-    } else {
-      setUrl(
-        `/todos/?idUser=${idUser}&_sort=${orderColumn}&_order=${order}&_page=${currentPage}`
-      );
+  const { data, mutate, isLoading } = useTodos(
+    `todos-${orderColumn}-${order}-${currentPage}-${filters}`,
+    {
+      idUser,
+      todo_like: filters !== "" ? filters : undefined,
+      _sort: orderColumn,
+      _order: order,
+      _page: currentPage,
     }
-  }, [orderColumn, order, currentPage, filters]);
-
-  const { data, mutate, isLoading } = useFetchSWR(url);
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setFilters(() => e.target.value);
-    console.log(filters);
   };
 
   const modalRef = useRef<ModalHandles>(null);
@@ -114,7 +99,7 @@ function TableTodo() {
         },
       },
       {
-        title: `${t("dateComplet")}`,
+        title: `${t("dateComplete")}`,
         dataIndex: "dateDoTodo",
         key: "dateDoTodo",
         width: 200,
@@ -196,9 +181,8 @@ function TableTodo() {
           rowExpandable: (record) => record?.description !== "",
         }}
         loading={isLoading}
-        onChange={(pagination, filters, sorter) => {
+        onChange={(_, __, sorter) => {
           const sort = sorter as SorterResult<TodoType>;
-          console.log(filters);
           setOrderColumn(sort.field as string);
           if (sort.order !== undefined) {
             setOrder((sort.order as string) === "ascend" ? "asc" : "desc");
@@ -216,7 +200,14 @@ function TableTodo() {
           },
         }}
       />
-      <ModalForm ref={modalRef} dataTodo={editData} />
+      <ModalForm
+        ref={modalRef}
+        dataTodo={editData}
+        orderColumn={orderColumn}
+        order={order}
+        filter={filters}
+        currentPage={currentPage}
+      />
       <Notification ref={notificationRef} />
     </div>
   );

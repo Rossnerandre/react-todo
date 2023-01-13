@@ -11,7 +11,7 @@ import { useForm } from "antd/es/form/Form";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../../types/todo";
 import { v4 as uuidv4 } from "uuid";
-import { useFetchSWR } from "../../hooks/useFetchSWR";
+import { useTodos } from "../../hooks/useTodos";
 import api from "../../services/api";
 import dayjs from "dayjs";
 import Notification, { NotificationHandles } from "../Notification";
@@ -23,9 +23,13 @@ export interface ModalHandles {
 
 interface Props {
   dataTodo?: TodoType | null;
+  orderColumn: string;
+  order: string;
+  filter: string;
+  currentPage: number;
 }
 const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
-  { dataTodo },
+  { dataTodo, orderColumn, order, filter, currentPage },
   ref
 ) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,15 +40,15 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
 
   const notificationRef = useRef<NotificationHandles>(null);
 
-  // const { mutate } = useFetchSWR(`todos`, {
-  //   idUser,
-  //   _sort: "create_at",
-  //   _order: "desc",
-  //   _page: "1",
-  // });
-
-  const { mutate } = useFetchSWR(
-    `/todos/?idUser=${idUser}&_sort=create_at&_order=desc&_page=1`
+  const { mutate } = useTodos(
+    `todos-${orderColumn}-${order}-${currentPage}-${filter}`,
+    {
+      idUser,
+      todo_like: filter !== "" ? filter : undefined,
+      _sort: orderColumn,
+      _order: order,
+      _page: currentPage,
+    }
   );
 
   const openMyModal = useCallback(() => {
@@ -52,6 +56,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   }, []);
 
   const closeMyModal = useCallback(() => {
+    form.resetFields();
     setIsModalOpen(false);
   }, []);
 
@@ -99,8 +104,6 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         });
       }
       setTimeout(() => {
-        setLoading(false);
-        form.resetFields();
         setIsModalOpen(false);
         if (dataTodo) {
           notificationRef.current?.openMyNotification(
@@ -113,11 +116,13 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
             `${t("sucessCreate")}`
           );
         }
-        mutate();
       }, 1000);
     } catch (error) {
-      setLoading(false);
       console.log(error);
+    } finally {
+      form.resetFields();
+      setLoading(false);
+      mutate();
     }
   };
 
