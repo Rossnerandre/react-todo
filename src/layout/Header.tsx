@@ -20,7 +20,7 @@ const StyledHeader = styled("header", {
 
 export function Header() {
   const { logout } = useAuth();
-  const { theme } = useConfigStore();
+  const { theme, language } = useConfigStore();
   const { nicknameUser } = useLoginStore();
   const { ChangeLanguage, ChangeTheme } = useConfigs();
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ export function Header() {
       disabled: true,
       label: (
         <Select
-          defaultValue="en"
+          defaultValue={language}
           style={{ width: "100%" }}
           onChange={(e: "pt" | "en") => ChangeLanguage(e)}
           options={[

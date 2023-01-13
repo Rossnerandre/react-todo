@@ -35,17 +35,21 @@ export default function Login() {
   const { autoAuth, login } = useAuth();
 
   useEffect(() => {
-    const autoLogin = autoAuth();
-    if (autoLogin) {
-      nav("/todos");
-    }
+    autoAuth().then((resp) => {
+      if (resp) {
+        nav("/todos");
+      }
+    });
   }, []);
 
   const onFinish = async (values: any) => {
     setLoading(true);
     setTimeout(async () => {
       try {
-        const response = await login(values.email, values.password);
+        const response = await login({
+          email: values.email,
+          password: values.password,
+        });
         if (response === "Email or pass don't match") {
           throw new Error(response);
         }

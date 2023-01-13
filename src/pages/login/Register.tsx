@@ -38,11 +38,11 @@ export default function Register() {
     setLoading(true);
     setTimeout(async () => {
       try {
-        const response = await register(
-          values.email,
-          values.password,
-          values.username
-        );
+        const response = await register({
+          email: values.email,
+          username: values.username,
+          password: values.password,
+        });
         if (response === "E-mails already registered!") {
           throw new Error("E-mails already registered!");
         }

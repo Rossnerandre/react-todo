@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import { styled } from "@stitches/react";
 import useConfigStore from "../store/configStore";
 import { ConfigProvider, theme } from "antd";
-import useConfigs from "../hooks/useConfigs";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 const { defaultAlgorithm, darkAlgorithm, useToken } = theme;
@@ -16,17 +15,12 @@ const Main = styled("main", {
 });
 
 function MyLayout() {
-  const { verifyConfig } = useConfigs();
   const { theme, language } = useConfigStore();
   const { token } = useToken();
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    verifyConfig();
-  }, []);
-
-  useEffect(() => {
-    if (language !== "") {
+    if (language) {
       i18n.changeLanguage(language);
     }
   }, [language]);
