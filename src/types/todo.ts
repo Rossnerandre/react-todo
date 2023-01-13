@@ -3,6 +3,7 @@ export interface TodoType {
   key: string;
   todo: string;
   create_at: string;
-  dateDoTodo: string;  
+  dateDoTodo: string;
+  description?: string;
   completed: boolean;
 }

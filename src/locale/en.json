@@ -4,6 +4,7 @@
     "newTodo": "Add New To Do",
     "todoInputError": "Please input your todo!",
     "todo": "Todo",
+    "description": "Description",
     "editTodo": "Edit",
     "delete": "Delete",
     "deleteConfirm": "Sure to delete?",

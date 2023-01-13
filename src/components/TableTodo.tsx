@@ -137,6 +137,14 @@ function TableTodo() {
         bordered
         columns={columns}
         dataSource={data ? data.data : []}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p style={{ marginBottom: 0, marginLeft: 15, textAlign: 'justify' }}>
+              {record.description}
+            </p>
+          ),
+          rowExpandable: (record) => record?.description !== "",
+        }}
         loading={isLoading}
         onChange={(pagination, filters, sorter) => {
           const sort = sorter as SorterResult<TodoType>;

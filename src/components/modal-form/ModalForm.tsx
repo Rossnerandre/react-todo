@@ -36,7 +36,16 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
 
   const notificationRef = useRef<NotificationHandles>(null);
 
-  const { mutate } = useFetchSWR(`todos`, {idUser, _sort: "create_at", _order: "desc", _page: "1"});
+  // const { mutate } = useFetchSWR(`todos`, {
+  //   idUser,
+  //   _sort: "create_at",
+  //   _order: "desc",
+  //   _page: "1",
+  // });
+
+  const { mutate } = useFetchSWR(
+    `/todos/?idUser=${idUser}&_sort=create_at&_order=desc&_page=1`
+  );
 
   const openMyModal = useCallback(() => {
     setIsModalOpen(true);
@@ -57,6 +66,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
       form.setFieldsValue({
         todo: dataTodo.todo,
         dateDoTodo: dayjs(+dataTodo.dateDoTodo),
+        description: dataTodo.description,
       });
     }
   }, [dataTodo]);
@@ -69,6 +79,9 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         await api.patch(`todos/${dataTodo.id}`, {
           todo: `${values.todo}`,
           dateDoTodo: `${Date.parse(values.dateDoTodo)}`,
+          description: `${
+            values.description === undefined ? "" : values.description
+          }`,
           completed: false,
         });
       } else {
@@ -76,6 +89,9 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
           id: `${id}`,
           key: `${id}`,
           todo: `${values.todo}`,
+          description: `${
+            values.description === undefined ? "" : values.description
+          }`,
           create_at: `${Date.now()}`,
           dateDoTodo: `${Date.parse(values.dateDoTodo)}`,
           idUser: `${idUser}`,
@@ -117,7 +133,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
         onCancel={closeMyModal}
         footer={[
           <Button key="back" onClick={closeMyModal}>
-            {t('cancel')}
+            {t("cancel")}
           </Button>,
           <Button
             key="submit"
@@ -125,7 +141,7 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
             loading={loading}
             onClick={form.submit}
           >
-            {t('addTodo')}
+            {t("addTodo")}
           </Button>,
         ]}
       >
@@ -144,6 +160,9 @@ const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
             name="todo"
             rules={[{ required: true, message: `${t("todoInputError")}` }]}
           >
+            <Input />
+          </Form.Item>
+          <Form.Item label={`${t("description")}`} name="description">
             <Input />
           </Form.Item>
           <Form.Item

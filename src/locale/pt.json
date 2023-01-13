@@ -4,6 +4,7 @@
     "newTodo": "Adicionar nova tafefa",
     "todoInputError": "Por favor, insira sua tarefa!",
     "todo": "Tarefa",
+    "description": "Descrição",
     "editTodo": "Editar",
     "delete": "Excluir",
     "deleteConfirm": "Deseja excluir?",
