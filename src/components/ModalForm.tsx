@@ -9,13 +9,13 @@ import React, {
 import { Form, Modal, Input, DatePicker, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useTranslation } from "react-i18next";
-import { TodoType } from "../../types/todo";
+import { TodoType } from "../types/todo";
 import { v4 as uuidv4 } from "uuid";
-import { useTodos } from "../../hooks/useTodos";
-import api from "../../services/api";
+import { useTodos } from "../hooks/useTodos";
+import api from "../services/api";
 import dayjs from "dayjs";
-import Notification, { NotificationHandles } from "../Notification";
-import useLoginStore from "../../store/loginStore";
+import Notification, { NotificationHandles } from "./Notification";
+import useLoginStore from "../store/loginStore";
 
 export interface ModalHandles {
   openMyModal: () => {};
@@ -23,10 +23,10 @@ export interface ModalHandles {
 
 interface Props {
   dataTodo?: TodoType | null;
-  orderColumn: string;
-  order: string;
-  filter: string;
-  currentPage: number;
+  orderColumn?: string;
+  order?: string;
+  filter?: string;
+  currentPage?: number;
 }
 const ModalForm: React.ForwardRefRenderFunction<ModalHandles, Props> = (
   { dataTodo, orderColumn, order, filter, currentPage },

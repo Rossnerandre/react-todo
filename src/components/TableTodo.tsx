@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo } from "react";
 import { Button, Popconfirm, Space, Switch, Table, Input, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import ModalForm, { ModalHandles } from "./modal-form/ModalForm";
+import ModalForm, { ModalHandles } from "./ModalForm";
 import { useTranslation } from "react-i18next";
 import { TodoType } from "../types/todo";
 import { useTodos } from "../hooks/useTodos";

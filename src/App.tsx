@@ -1,6 +1,6 @@
 import { Button } from "antd";
-import { useEffect, useState, useRef, useCallback } from "react";
-import ModalForm, { ModalHandles } from "./components/modal-form/ModalForm";
+import { useRef, useCallback } from "react";
+import ModalForm, { ModalHandles } from "./components/ModalForm";
 import TableTodo from "./components/TableTodo";
 import { useTranslation } from "react-i18next";
 import { PlusOutlined } from "@ant-design/icons";
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <>
-      <ModalForm ref={modalRef} />      
+      <ModalForm ref={modalRef} />
       <Button
         type="primary"
         onClick={() => handleOpenMyModal()}
