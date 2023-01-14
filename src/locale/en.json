@@ -11,6 +11,8 @@
     "finishTodo": "Finish to-do",
     "doneTodo": "Done",
     "deleteConfirm": "Sure to delete?",
+    "Date": "Date",
+    "notification": "Notification",
     "dateComplete": "Date to-do",
     "actionTable": "Action",
     "addTodo": "Save",

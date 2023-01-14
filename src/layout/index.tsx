@@ -6,6 +6,8 @@ import { ConfigProvider, theme } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 const { defaultAlgorithm, darkAlgorithm, useToken } = theme;
+import ptBR from "antd/locale/pt_BR";
+import enUS from "antd/locale/en_US";
 
 const Main = styled("main", {
   minHeight: "calc(100vh - 82px)",
@@ -30,6 +32,7 @@ function MyLayout() {
       theme={{
         algorithm: theme === "light" ? defaultAlgorithm : darkAlgorithm,
       }}
+      locale={language === "pt" ? ptBR : enUS}
     >
       <Header />
       <Main
